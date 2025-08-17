@@ -141,7 +141,7 @@ export function Clubs() {
 
 	const handleCreateClub = async (e) => {
 		e.preventDefault();
-		if (!user?.isAdmin && user?.role !== "admin ") {
+		if (!user?.isAdmin && user?.role !== "admin") {
 			toast.error("Only admins can create clubs");
 			return;
 		}
@@ -170,11 +170,19 @@ export function Clubs() {
 	};
 
 	const handleDeleteClub = (clubId) => {
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can delete clubs");
 			return;
 		}
-		toast.success("Club deleted successfully!");
+		
+		try {
+			await apiService.deleteClub(clubId);
+			await fetchClubs();
+			toast.success("Club deleted successfully!");
+		} catch (error) {
+			console.error("Failed to delete club:", error);
+			toast.error("Failed to delete club");
+		}
 	};
 
 	return (

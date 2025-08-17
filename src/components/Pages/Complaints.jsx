@@ -157,7 +157,7 @@ export function Complaints() {
 	};
 
 	const resolveComplaint = (complaintId) => {
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can resolve complaints");
 			return;
 		}

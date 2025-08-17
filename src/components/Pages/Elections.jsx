@@ -101,7 +101,7 @@ export function Elections() {
 			toast.error("At least two candidates are required");
 			return;
 		}
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can create elections");
 			return;
 		}
@@ -109,7 +109,7 @@ export function Elections() {
 		try {
 			const electionData = {
 				...newElection,
-				status: "Pending",
+				status: "upcoming",
 				totalVotes: 0,
 				eligibleVoters: 12547,
 			};
@@ -133,7 +133,7 @@ export function Elections() {
 		setShowNewElectionForm(false);
 	};
 
-	const handleVote = async (electionId, candidateId) => {
+		if (!user?.isAdmin || user?.role !== "admin") {
 		if (!user) {
 			toast.error("Please login to vote");
 			return;
@@ -160,11 +160,19 @@ export function Elections() {
 			toast.error("Only admins can delete elections");
 			return;
 		}
-		toast.success("Election deleted successfully!");
+		
+		try {
+			await apiService.deleteElection(electionId);
+			await fetchElections();
+			toast.success("Election deleted successfully!");
+		} catch (error) {
+			console.error("Failed to delete election:", error);
+			toast.error("Failed to delete election");
+		}
 	};
 
 	const announceResults = async (electionId) => {
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can announce results");
 			return;
 		}

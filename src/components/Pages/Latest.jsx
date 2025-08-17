@@ -68,7 +68,7 @@ export function Latest() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can create posts");
 			return;
 		}
@@ -105,7 +105,7 @@ export function Latest() {
 	};
 
 	const handleDeletePost = (postId) => {
-		if (!user?.isAdmin && user?.role !== "admin") {
+		if (!user?.isAdmin || user?.role !== "admin") {
 			toast.error("Only admins can delete posts");
 			return;
 		}
